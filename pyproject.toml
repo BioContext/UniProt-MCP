@@ -1,0 +1,44 @@
+[build-system]
+requires = ["hatchling>=1.0.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "uniprot-mcp"
+version = "0.1.0"
+description = "Boilerplate for creating MCP (Model Context Protocol) servers that wrap existing APIs"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Your Name/Organization"}
+]
+dependencies = [
+    "fastapi>=0.100.0",
+    "httpx>=0.24.1",
+    "mcp>=1.2.0",
+    "pydantic>=2.0.0",
+    "uvicorn>=0.22.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0.0",
+    "pytest-asyncio>=0.15.0",
+    "black>=21.5b2",
+    "isort>=5.9.0",
+    "mypy>=0.910",
+]
+
+[project.scripts]
+mcp-server = "mcp_server.__main__:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["mcp_server"]
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]
+
+[tool.isort]
+profile = "black"
+line_length = 88 
