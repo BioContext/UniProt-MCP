@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-MCP Test Client.
+UniProt MCP Test Client.
 
-A simple client for testing the MCP server locally. This script acts as a simple
-interface to test the tools provided by the MCP server.
+A simple client for testing the UniProt MCP server locally. This script acts as a simple
+interface to test the tools provided by the UniProt MCP server.
 
 Usage:
     python test_client.py
@@ -17,41 +17,75 @@ from typing import Any, Dict, List
 
 async def main():
     """Run the test client."""
-    print("MCP Test Client")
-    print("==============")
-    print("This client will send test requests to the MCP server.")
+    print("UniProt MCP Test Client")
+    print("======================")
+    print("This client will send test requests to the UniProt MCP server.")
     print("The server should be running in another terminal with:")
     print("  python -m mcp_server --stdio")
     print()
     
-    # Example test: get_data_by_id
-    await test_get_data_by_id("example123")
+    # Test get_protein_by_accession with human insulin
+    await test_get_protein_by_accession("P01308")
     
-    # Example test: search_items
-    await test_search_items("example", 5)
+    # Test search_proteins for BRCA1
+    await test_search_proteins("BRCA1 human", 3)
+    
+    # Test get_protein_sequences for insulin
+    await test_get_protein_sequences("P01308")
+    
+    # Test get_proteomics_data for BRCA1
+    await test_get_proteomics_data("P38398", "domains")
 
-async def test_get_data_by_id(item_id: str):
-    """Test the get_data_by_id tool."""
-    print(f"Testing get_data_by_id with item_id={item_id}")
+async def test_get_protein_by_accession(accession: str):
+    """Test the get_protein_by_accession tool."""
+    print(f"Testing get_protein_by_accession with accession={accession}")
     
     request = {
-        "name": "get_data_by_id",
+        "name": "get_protein_by_accession",
         "parameters": {
-            "item_id": item_id
+            "accession": accession,
+            "format": "json"
         }
     }
     
     await send_request(request)
 
-async def test_search_items(query: str, max_results: int):
-    """Test the search_items tool."""
-    print(f"Testing search_items with query='{query}', max_results={max_results}")
+async def test_search_proteins(query: str, limit: int):
+    """Test the search_proteins tool."""
+    print(f"Testing search_proteins with query='{query}', limit={limit}")
     
     request = {
-        "name": "search_items",
+        "name": "search_proteins",
         "parameters": {
             "query": query,
-            "max_results": max_results
+            "limit": limit
+        }
+    }
+    
+    await send_request(request)
+
+async def test_get_protein_sequences(accessions: str):
+    """Test the get_protein_sequences tool."""
+    print(f"Testing get_protein_sequences with accessions='{accessions}'")
+    
+    request = {
+        "name": "get_protein_sequences",
+        "parameters": {
+            "accessions": accessions
+        }
+    }
+    
+    await send_request(request)
+
+async def test_get_proteomics_data(accession: str, feature_type: str):
+    """Test the get_proteomics_data tool."""
+    print(f"Testing get_proteomics_data with accession='{accession}', feature_type='{feature_type}'")
+    
+    request = {
+        "name": "get_proteomics_data",
+        "parameters": {
+            "accession": accession,
+            "feature_type": feature_type
         }
     }
     
